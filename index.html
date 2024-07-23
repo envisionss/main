@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Robux Purchase</title>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=YOUR_SITE_KEY"></script>
     <style>
         body {
             background-color: rgb(12, 12, 12);
@@ -21,7 +21,7 @@
             border: 2px solid rgb(45, 45, 45);
             border-radius: 20px;
             box-sizing: border-box;
-            display: none; /* Hide content initially */
+            display: flex;
             justify-content: space-around;
             align-items: center;
             padding: 20px;
@@ -29,6 +29,7 @@
             background: rgb(25, 25, 25);
             position: relative;
             overflow: hidden;
+            visibility: hidden; /* Hide content initially */
         }
         .item {
             text-align: center;
@@ -88,7 +89,7 @@
 </head>
 <body>
     <div class="captcha-container">
-        <div class="g-recaptcha" data-sitekey="6Lc6OBYqAAAAAAE2k2cGijLsK5L4z2hjq9tk1cbC" data-callback="onCaptchaSuccess"></div>
+        <button onclick="executeCaptcha()">Verify you are human</button>
     </div>
 
     <div class="center-box" id="mainContent">
@@ -105,11 +106,33 @@
     </div>
 
     <script>
-        function onCaptchaSuccess() {
-            // Show the main content after successful CAPTCHA
-            document.getElementById('mainContent').style.display = 'flex';
-            // Optionally hide the CAPTCHA container
-            document.querySelector('.captcha-container').style.display = 'none';
+        function executeCaptcha() {
+            grecaptcha.ready(function() {
+                grecaptcha.execute('6Lc6OBYqAAAAAHymRSo2POJ3wXBWfyTa2qhJarTb', {action: 'homepage'}).then(function(token) {
+                    verifyToken(token);
+                });
+            });
+        }
+
+        function verifyToken(token) {
+            fetch('/.netlify/functions/verify-recaptcha', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({token: token}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show the main content after successful CAPTCHA
+                    document.getElementById('mainContent').style.visibility = 'visible';
+                    // Optionally hide the CAPTCHA container
+                    document.querySelector('.captcha-container').style.display = 'none';
+                } else {
+                    alert('CAPTCHA verification failed. Please try again.');
+                }
+            });
         }
     </script>
 </body>
