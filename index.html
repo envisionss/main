@@ -77,18 +77,33 @@
             transform: scale(1.05);
         }
         .captcha-container {
-            width: 100%;
             display: flex;
             justify-content: center;
-            margin-bottom: 20px;
+            align-items: center;
+            height: 100vh; /* Ensure the container covers the full height of the viewport */
+            width: 100vw; /* Ensure the container covers the full width of the viewport */
+            background: rgba(0, 0, 0, 0.8); /* Optional: a background to make sure it's visible */
+            position: absolute;
+            top: 0;
+            left: 0;
         }
-        .captcha-container .g-recaptcha {
-            display: inline-block;
+        .captcha-container button {
+            background: white;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+        .captcha-container button:hover {
+            background: #ddd;
         }
     </style>
 </head>
 <body>
-    <div class="captcha-container">
+    <div class="captcha-container" id="captchaContainer">
         <button onclick="executeCaptcha()">Verify you are human</button>
     </div>
 
@@ -125,10 +140,8 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Show the main content after successful CAPTCHA
                     document.getElementById('mainContent').style.visibility = 'visible';
-                    // Optionally hide the CAPTCHA container
-                    document.querySelector('.captcha-container').style.display = 'none';
+                    document.getElementById('captchaContainer').style.display = 'none';
                 } else {
                     alert('CAPTCHA verification failed. Please try again.');
                 }
