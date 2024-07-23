@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robux Purchase</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+        body {
+            background-color: rgb(12, 12, 12);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .center-box {
+            width: 700px;
+            height: 600px;
+            border: 2px solid rgb(45, 45, 45);
+            border-radius: 20px;
+            box-sizing: border-box;
+            display: none; /* Hide content initially */
+            justify-content: space-around;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            background: rgb(25, 25, 25);
+            position: relative;
+            overflow: hidden;
+        }
+        .item {
+            text-align: center;
+            color: white;
+            width: 300px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .item:hover {
+            transform: scale(1.05);
+        }
+        .item img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .item img:hover {
+            transform: scale(1.1);
+        }
+        .item div {
+            font-weight: bold;
+            font-family: sans-serif;
+            margin: 15px 0;
+            font-size: 20px;
+        }
+        .item a {
+            display: inline-block;
+            background-color: rgb(45, 45, 45);
+            text-decoration: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+            font-family: sans-serif;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .item a:hover {
+            background-color: rgb(60, 60, 60);
+            transform: scale(1.1);
+        }
+        .item a:active {
+            transform: scale(1.05);
+        }
+        .captcha-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .captcha-container .g-recaptcha {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="captcha-container">
+        <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY" data-callback="onCaptchaSuccess"></div>
+    </div>
+
+    <div class="center-box" id="mainContent">
+        <div class="item">
+            <img src="robux.png" alt="Robux">
+            <div>5,000 Robux</div>
+            <a href="https://www.roblox.com/catalog/5822748225/5-000" target="_blank">Buy</a>
+        </div>
+        <div class="item">
+            <img src="robux.png" alt="Robux">
+            <div>10,000 Robux</div>
+            <a href="https://www.roblox.com/catalog/5834026345/10-000" target="_blank">Buy</a>
+        </div>
+    </div>
+
+    <script>
+        function onCaptchaSuccess() {
+            // Show the main content after successful CAPTCHA
+            document.getElementById('mainContent').style.display = 'flex';
+            // Optionally hide the CAPTCHA container
+            document.querySelector('.captcha-container').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
