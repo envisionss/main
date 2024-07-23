@@ -28,7 +28,6 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
             background: rgb(25, 25, 25);
             position: relative;
-            overflow: hidden;
             visibility: hidden; /* Hide content initially */
         }
         .item {
@@ -123,28 +122,37 @@
     <script>
         function executeCaptcha() {
             grecaptcha.ready(function() {
-                grecaptcha.execute('6Lc6OBYqAAAAAAE2k2cGijLsK5L4z2hjq9tk1cbC', {action: 'homepage'}).then(function(token) {
-                    verifyToken(token);
-                });
+                grecaptcha.execute('6Lc6OBYqAAAAAAE2k2cGijLsK5L4z2hjq9tk1cbC', { action: 'homepage' })
+                    .then(function(token) {
+                        console.log('CAPTCHA token:', token);
+                        verifyToken(token);
+                    })
+                    .catch(function(error) {
+                        console.error('Error during CAPTCHA execution:', error);
+                    });
             });
         }
 
         function verifyToken(token) {
-            fetch('/.netlify/functions/verify-recaptcha', {
+            fetch('https://your-serverless-function-url/verify-recaptcha', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({token: token}),
+                body: JSON.stringify({ token: token }),
             })
             .then(response => response.json())
             .then(data => {
+                console.log('Verification response:', data);
                 if (data.success) {
                     document.getElementById('mainContent').style.visibility = 'visible';
                     document.getElementById('captchaContainer').style.display = 'none';
                 } else {
                     alert('CAPTCHA verification failed. Please try again.');
                 }
+            })
+            .catch(error => {
+                console.error('Error during verification:', error);
             });
         }
     </script>
